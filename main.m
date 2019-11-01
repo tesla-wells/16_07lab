@@ -275,11 +275,10 @@ for n=1 : length(partb)
     mars_moves = timesCross(1)/period_m*2*pi;
     angles(1, n) = wrapToPi(inter_angles(1, n) - mars_moves);
      
-    ops(1, n) = 0;
-    arrive(1, n) = 0;
+
     for p=1 : length(diff)
-        if abs(diff(p) - angles(1,n)) < 0.025 & ops(1, n) == 0
-            ops(1, n) = td5(p) + 2020;
+        if abs(diff(p) - angles(1,n)) < 0.1 & ops(1, n) == 0
+        	ops(1, n) = td5(p) + 2020;
             arrive(1, n) = td5(p) + inter_times(1, n) + 2020;
         end
     end
@@ -290,11 +289,8 @@ for n=1 : length(partb)
     mars_moves = timesCross(2)/period_m*2*pi;
     angles(2, n) = wrapToPi(inter_angles(2, n) - mars_moves);
 
-    
-    ops(2, n) = 0;
-    arrive(2, n) = 0;
     for p=1 : length(diff)
-        if abs(diff(p) - angles(2,n)) < 0.025 & ops(2, n) == 0
+        if abs(diff(p) - angles(2,n)) < 0.1 & ops(2, n) == 0
             ops(2, n) = td5(p) + 2020;
             arrive(2, n) = td5(p) + inter_times(2, n) + 2020;
         end
@@ -312,5 +308,5 @@ figure(20)
 hold on 
     scatter(ops(1,:), inter_times(1,:)')
     scatter(ops(2,:), inter_times(2,:)')
-    scatter([timesWhenEqual(2) + 2020], [period_t/period_e])
+    scatter([timesWhenEqual(1) + 2020], [period_t/period_e])
 hold off
