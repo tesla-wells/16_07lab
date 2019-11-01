@@ -1,4 +1,5 @@
 clear
+close all
 
 %Plot Earth
 %Plot Mars
@@ -236,19 +237,22 @@ end
 
 table(secpass', intersects')
 
-partb = [21.5 30 40 50 60 70 80 90 100 110];
+partb = linspace(21.5, 158, 80);
 
 times = zeros(1, length(partb));
 inter_times = zeros(2, length(partb));
 inter_angles = zeros(2, length(partb));
 angles = zeros(2, length(partb));
+ops = zeros(2, length(partb));
+arrive = zeros(2, length(partb));
+
 
 options = odeset('RelTol', 1e-5);
 [td5, planet_locs] = ode45(@(t, state) differenceMachine(t, state, newG, M_s), [0 10], boundboth, options);
 
 theta_e = atan2(planet_locs(:,2), planet_locs(:,1));
 theta_m = atan2(planet_locs(:,6), planet_locs(:,5));
-diff = wrapToPi(theta_m - tehta_e);
+diff = wrapToPi(-theta_m + theta_e);
 
 for n=1 : length(partb)    
     deltv_elx = deltv_el*cos(partb(n)/180*pi);
@@ -269,24 +273,44 @@ for n=1 : length(partb)
     inter_angles(1, n) = atan2(statesCross(1, 2), statesCross(1, 1));
     
     mars_moves = timesCross(1)/period_m*2*pi;
-    angles(1, n) = inter_angles(1, n) - mars_moves;
-    if(angles(1, n) < -1*pi)
-        angles(1, n) = angles(1, n) + 2*pi;
+    angles(1, n) = wrapToPi(inter_angles(1, n) - mars_moves);
+     
+    ops(1, n) = 0;
+    arrive(1, n) = 0;
+    for p=1 : length(diff)
+        if abs(diff(p) - angles(1,n)) < 0.025 & ops(1, n) == 0
+            ops(1, n) = td5(p) + 2020;
+            arrive(1, n) = td5(p) + inter_times(1, n) + 2020;
+        end
     end
     
     inter_times(2, n) = timesCross(2);
     inter_angles(2, n) = atan2(statesCross(2, 2), statesCross(2, 1));
     
     mars_moves = timesCross(2)/period_m*2*pi;
-    angles(2, n) = inter_angles(2, n) - mars_moves;
+    angles(2, n) = wrapToPi(inter_angles(2, n) - mars_moves);
+
     
-    if(angles(2, n) < -1*pi)
-        angles(2, n) = angles(2, n) + 2*pi;
+    ops(2, n) = 0;
+    arrive(2, n) = 0;
+    for p=1 : length(diff)
+        if abs(diff(p) - angles(2,n)) < 0.025 & ops(2, n) == 0
+            ops(2, n) = td5(p) + 2020;
+            arrive(2, n) = td5(p) + inter_times(2, n) + 2020;
+        end
     end
+    
 end
 
 holdme = [partb', times', inter_times(1,:)', inter_angles(1,:)', inter_times(2,:)', inter_angles(2,:)']
 
+holdyou = [partb', angles(1,:)', (ops(1,:)'), (arrive(1,:)'), angles(2,:)', (ops(2,:)'), (arrive(2,:)')]
 
 %part 3c%
 
+figure(20)
+hold on 
+    scatter(ops(1,:), inter_times(1,:)')
+    scatter(ops(2,:), inter_times(2,:)')
+    scatter([timesWhenEqual(2) + 2020], [period_t/period_e])
+hold off
