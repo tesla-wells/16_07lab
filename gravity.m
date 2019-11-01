@@ -1,7 +1,7 @@
 function [dStatedt] = gravity(t, state_vec, G, M)
     x = state_vec(1);
-    xdot = state_vec(2);
-    y = state_vec(3);
+    y = state_vec(2);
+    xdot = state_vec(3);
     ydot = state_vec(4);
     
     r = sqrt(x^2 + y^2);
@@ -14,8 +14,8 @@ function [dStatedt] = gravity(t, state_vec, G, M)
     dStatedt = zeros(4, 1);
     
     dStatedt(1) = xdot;
-    dStatedt(2) = xddot;
-    dStatedt(3) = ydot;
+    dStatedt(2) = ydot;
+    dStatedt(3) = xddot;
     dStatedt(4) = yddot;
 
 end
