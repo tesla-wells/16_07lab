@@ -252,7 +252,7 @@ options = odeset('RelTol', 1e-5);
 
 theta_e = atan2(planet_locs(:,2), planet_locs(:,1));
 theta_m = atan2(planet_locs(:,6), planet_locs(:,5));
-diff = wrapToPi(-theta_m + theta_e);
+diff = wrapToPi(theta_m - theta_e);
 
 for n=1 : length(partb)    
     deltv_elx = deltv_el*cos(partb(n)/180*pi);
@@ -272,7 +272,7 @@ for n=1 : length(partb)
     inter_times(1, n) = timesCross(1);
     inter_angles(1, n) = atan2(statesCross(1, 2), statesCross(1, 1));
     
-    mars_moves = timesCross(1)/period_m*2*pi;
+    mars_moves = timesCross(1)*period_e/period_m*2*pi;
     angles(1, n) = wrapToPi(inter_angles(1, n) - mars_moves);
      
 
@@ -286,7 +286,7 @@ for n=1 : length(partb)
     inter_times(2, n) = timesCross(2);
     inter_angles(2, n) = atan2(statesCross(2, 2), statesCross(2, 1));
     
-    mars_moves = timesCross(2)/period_m*2*pi;
+    mars_moves = timesCross(2)*period_e/period_m*2*pi;
     angles(2, n) = wrapToPi(inter_angles(2, n) - mars_moves);
 
     for p=1 : length(diff)
