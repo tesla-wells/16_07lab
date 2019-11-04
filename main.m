@@ -167,7 +167,7 @@ roundtrip = firstreturn - timesWhenEqual(1);
 v_hp = sqrt(2*(newG*M_s/r_e - newG*M_s/(2*a)));
 deltv_el = 2*(v_hp - v_e);
 
-firstpass = [0 5 10 15 20 25 30 35 40 45 50 55 60 65 70 75 80 85 90];
+firstpass = [0 5 10 15 20 25 30 35 40 45 50 55 60 65 70 75 80 85 90] + 90;
 intersects = zeros(1, 19);
 
 figure(5)
@@ -200,7 +200,7 @@ for n=1 : length(firstpass)
     end
 end
 
-table(firstpass', intersects')
+holdfirst = [firstpass', intersects']
 
 secpass = [20 20.5 21 21.5 22 22.5 23 23.5 24 24.5 25];
 intersects = zeros(1, length(secpass));
@@ -235,9 +235,9 @@ for n=1 : length(secpass)
     end
 end
 
-table(secpass', intersects')
+holdtable = [secpass', intersects']
 
-partb = linspace(21.5, 158, 80);
+partb = linspace(21.5, 158, 40);
 
 times = zeros(1, length(partb));
 inter_times = zeros(2, length(partb));
@@ -298,9 +298,9 @@ for n=1 : length(partb)
     
 end
 
-holdme = [partb', times', inter_times(1,:)', inter_angles(1,:)', inter_times(2,:)', inter_angles(2,:)']
+holdme = [partb', times', inter_times(1,:)', inter_angles(1,:)', inter_times(2,:)', inter_angles(2,:)'];
 
-holdyou = [partb', angles(1,:)', (ops(1,:)'), (arrive(1,:)'), angles(2,:)', (ops(2,:)'), (arrive(2,:)')]
+holdyou = [partb', angles(1,:)', (ops(1,:)'), (arrive(1,:)'), angles(2,:)', (ops(2,:)'), (arrive(2,:)')];
 
 %part 3c%
 
@@ -309,4 +309,7 @@ hold on
     scatter(ops(1,:), inter_times(1,:)')
     scatter(ops(2,:), inter_times(2,:)')
     scatter([timesWhenEqual(1) + 2020], [period_t/period_e])
+    title('porkchop')
+    xlabel('departure date')
+    ylabel('time to get to mars in years')
 hold off
