@@ -123,6 +123,8 @@ angle_toReturn = pi - earth_moves;
 options = odeset('RelTol', 1e-5, 'Event', @toMars);
 [td5, planet_locs, timesWhenEqual, statesWhenEqual, ~ ] = ode45(@(t, state) differenceMachine(t, state, newG, M_s), [0 10], boundboth, options);
 
+earthtomarstable = [(timesWhenEqual + 2020) (timesWhenEqual + 2020 + period_t/period_e)]
+
 figure(10)
 hold on
 scatter((timesWhenEqual + 2020), (timesWhenEqual + 2020 + period_t/period_e))
@@ -135,6 +137,8 @@ frqeuency = timesWhenEqual(2) - timesWhenEqual(1);
 
 options = odeset('RelTol', 1e-5, 'Event', @toEarth);
 [td6, planet_locs2, timesWhenEqual2, statesWhenEqual2, ~ ] = ode45(@(t, state) differenceMachine(t, state, newG, M_s), [0 10], boundboth, options);
+
+marstoearthtable = [(timesWhenEqual2 + 2020), (timesWhenEqual2 + 2020 + period_t/period_e)]
 
 figure(4)
 hold on
